@@ -1,4 +1,4 @@
-from camera import set_params
+from camera import *
 from detector import Detector
 from picamera import PiCamera
 import time
@@ -7,7 +7,8 @@ import time
 class CameraDetector(Detector):
 
     def update(self):
-        pass
+        img = grab_image(self.camera)
+        print(img)
 
     def on_start(self):
         self.camera = PiCamera()
