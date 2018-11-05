@@ -17,9 +17,9 @@ class Logger:
             open(self.file_path(), 'w').close()  # Create file.
         return open(self.file_path(), 'a')
 
-    def file_path(self): return f"{self.output_folder}/{self.log_file}"
+    def file_path(self): return "{0}/{1}".format(self.output_folder, self.log_file)
 
     def log(self, msg):
-        self.file.write(f"{timestamp()} - {msg}\n")
+        self.file.write("{0} - {1}\n".format(timestamp(), msg))
 
     def shutdown(self): self.file.close()
