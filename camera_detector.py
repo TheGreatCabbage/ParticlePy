@@ -1,5 +1,6 @@
 from camera import *
 from detector import Detector
+from numpy import ndarray
 from picamera import PiCamera
 import time
 
@@ -8,7 +9,8 @@ class CameraDetector(Detector):
 
     def update(self):
         img = grab_image(self.camera)
-        print(img)
+        analyse_image(img)
+        print("Taken image")
 
     def on_start(self):
         self.camera = PiCamera()

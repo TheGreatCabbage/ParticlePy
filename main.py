@@ -4,8 +4,9 @@ import sys
 detector = CameraDetector()
 
 args = sys.argv[1:]
-# Not implemented yet. 
-#if "scint" in args: detector = ScintillatorDetector()
+if "scint" in args:
+    raise NotImplementedError(
+        "Scintillator detector has not been implemented yet.")
 
 
 def run():
