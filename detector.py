@@ -16,10 +16,10 @@ class Logger:
             os.mkdir(self.output_folder)  # Create folder.
         if self.log_file not in os.listdir(self.output_folder):
             open(self.file_path(), 'w').close()  # Create file.
-        return open(self.file_path(), 'a')
+        return open(self.file_path(), 'a')  # Open file in append mode.
 
-    def file_path(
-        self): return "{0}/{1}".format(self.output_folder, self.log_file)
+    def file_path(self):
+        return "{0}/{1}".format(self.output_folder, self.log_file)
 
     def log(self, msg):
         self.file.write("{0} - {1}\n".format(timestamp(), msg))

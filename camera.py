@@ -38,14 +38,13 @@ def grab_image(camera):
     return data
 
 
-def save_image(img): imsave("out.png", img)
+def save_image(img, name="out"): imsave("{}.png".format(name), img)
+
+
+threshold = 64 * 2464 * 3280 + 40
 
 
 def analyse_image(img):
-    count = 0
-    for i in img:
-        if count > 0: break
-        for pixel in i:
-            if pixel > 80:
-                count += 1
-    print("{0} bright pixels.".format(count))
+    brightness = np.sum(img)
+    print("Brightness is {}. {}".format(brightness,
+                                        "Above threshold!" if brightness > threshold else ""))
