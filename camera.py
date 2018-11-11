@@ -39,7 +39,7 @@ def grab_image(camera):
     return data
 
 
-def save_image(img, name="out"): imsave("data/img/{}.png".format(name), img)
+def save_image(img, name="out"): imsave("data/{}.png".format(name), img)
 
 
 threshold = 64 * 2464 * 3280 + 40
@@ -50,4 +50,4 @@ def analyse_image(img):
     print("Brightness is {}. {}".format(brightness,
                                         "Above threshold!" if brightness > threshold else ""))
     if brightness > threshold:
-            save_image(img, "save_{}".format(timestamp()))
+        save_image(img, "save_{}".format(timestamp()))

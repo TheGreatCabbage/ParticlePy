@@ -3,10 +3,17 @@ import sys
 
 detector = CameraDetector()
 
-args = sys.argv[1:]
+# Get command line arguments, remove dashes for easy parsing.
+args = list(map(lambda x: x.replace("-", ""), sys.argv[1:]))
+
 if "scint" in args:
+    # This is where we would set 'detector' to be a ScintillatorDetector.
     raise NotImplementedError(
         "Scintillator detector has not been implemented yet.")
+
+if "purge" in args:
+    # Purge data, including logs and images.
+    detector.purge_on_start = True
 
 
 def run():
