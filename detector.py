@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
-from time_utils import timestamp
+from datetime import datetime
+from time import time 
 import os
 
+def timestamp():
+    return datetime.fromtimestamp(time()).strftime("%Y-%m-%d %H:%M:%S")
 
 class Logger:
 

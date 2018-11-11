@@ -1,4 +1,5 @@
 from picamera import PiCamera
+from detector import timestamp
 from scipy.misc import bytescale, imsave
 from io import BytesIO
 from numpy import frombuffer, uint16, uint8, delete, s_, ones
@@ -38,7 +39,7 @@ def grab_image(camera):
     return data
 
 
-def save_image(img, name="out"): imsave("{}.png".format(name), img)
+def save_image(img, name="out"): imsave("data/img/{}.png".format(name), img)
 
 
 threshold = 64 * 2464 * 3280 + 40
@@ -48,3 +49,5 @@ def analyse_image(img):
     brightness = np.sum(img)
     print("Brightness is {}. {}".format(brightness,
                                         "Above threshold!" if brightness > threshold else ""))
+    if brightness > threshold:
+            save_image(img, "save_{}".format(timestamp()))

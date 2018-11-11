@@ -10,7 +10,6 @@ class CameraDetector(Detector):
     def update(self):
         img = grab_image(self.camera)
         analyse_image(img)
-        print("Taken image")
 
     def on_start(self):
         self.camera = PiCamera()
