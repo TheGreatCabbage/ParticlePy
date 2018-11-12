@@ -5,7 +5,7 @@ import shutil
 import os
 
 def timestamp():
-    return datetime.fromtimestamp(time()).strftime("%Y-%m-%d %H:%M:%S").replace(" ", "_")
+    return datetime.fromtimestamp(time()).strftime("%Y-%m-%d %H-%M-%S").replace(" ", "_")
 
 class Logger:
 

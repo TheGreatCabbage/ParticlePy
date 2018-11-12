@@ -42,7 +42,7 @@ def grab_image(camera):
 def save_image(img, name="out"): imsave("data/{}.png".format(name), img)
 
 
-threshold = 64 * 2464 * 3280 + 40
+threshold = 521630000
 
 
 def analyse_image(img):
