@@ -14,10 +14,12 @@ def get_pixels(img):
 
 def analyse(name, data):
     threshold = np.average(data) + 20
-    marking = 100
+    marking = 3280
+
     for row in data:
         if np.max(row) > threshold:
-            row[0: marking] = 255
+            row[:marking] = 255
+
     save_image(name, data)
     print("{} - Saved edit of image {}".format(timestamp(), name))
 
@@ -44,7 +46,7 @@ def divide_into(list, parts): return np.array_split(list, parts)
 if __name__ == "__main__":
     t0 = time.time()
 
-    # Use multiprocessing for an 8x performance improvement (depending on CPU).
+    # Use multiprocessing for an ~8x performance improvement (depending on CPU).
     cores = mp.cpu_count()
     images = divide_into(get_images(), cores)
     processes = []
