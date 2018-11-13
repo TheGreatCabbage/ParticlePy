@@ -3,8 +3,8 @@ from detector import timestamp
 import multiprocessing as mp
 import math
 import numpy as np
+import time
 import os
-import time 
 
 
 def get_pixels(img):
@@ -13,8 +13,7 @@ def get_pixels(img):
 
 
 def analyse(name, data):
-    x, y = data.shape
-    threshold = np.average(data) + 80
+    threshold = np.average(data) + 20
     marking = 100
     for row in data:
         if np.max(row) > threshold:
