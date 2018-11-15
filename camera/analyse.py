@@ -6,6 +6,7 @@ import numpy as np
 import time
 import os
 
+folder = "data"
 
 def get_pixels(img):
     pixels = imread(img, as_gray=False, pilmode='L')
@@ -27,8 +28,8 @@ def analyse(name, data):
 def save_image(name, data): imsave(name.replace("save", "edit"), data)
 
 
-def get_images(): return list(map(lambda x: "data/{}".format(x),
-                                  filter(lambda x: ".png" == x[-4:] and "edit" != x[:4], os.listdir("data/"))))
+def get_images(): return list(map(lambda x: "{}/{}".format(folder, x),
+                                  filter(lambda x: ".png" == x[-4:] and "edit" != x[:4], os.listdir(folder))))
 
 
 def analyse_images(images):

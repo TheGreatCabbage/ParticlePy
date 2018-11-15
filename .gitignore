@@ -1,5 +1,5 @@
 # Data folder and images
-data/
+camera/data
 *.png
 
 # Byte-compiled / optimized / DLL files
