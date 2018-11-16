@@ -28,8 +28,8 @@ Git will create a folder and download the code into it. You can then open VS Cod
 
 ## Running the code
 
-To run some code, open a terminal in the same folder as the file. In VS Code, just click * *Terminal->New Terminal* * and then `cd` into the correct subdirectory - e.g. `cd muons`. On Windows, you could also hold shift while right-clicking when viewing the folder, then click "open Powershell window here".)
+To run some code, open a terminal in the same folder as the file. In VS Code, just click *Terminal->New Terminal* and then `cd` into the correct subdirectory - e.g. `cd muons`. On Windows, you could also hold shift while right-clicking when viewing the folder, then click "open Powershell window here".)
 
-Then you can run `python file.py` where `file.py` is the code you wish to execute. You could instead use the * *Code runner* * extension in VS Code while the correct file is opened.
+Then you can run `python file.py` where `file.py` is the code you wish to execute. You could instead use the *Code runner* extension in VS Code while the correct file is opened.
 
 If this causes an error, you may be in the wrong directory (in this case, use `cd` to change directories - e.g `cd muons` to change from `ParticlePy` to `ParticlePy/muons`).
