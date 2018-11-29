@@ -9,6 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "cwd": "${workspaceFolder}/analysis",
             "console": "integratedTerminal"
         },
         {
@@ -16,7 +17,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "cwd": "${workspaceFolder}/muons",
+            "cwd": "${workspaceFolder}/analysis",
             "console": "externalTerminal"
         }
     ]
