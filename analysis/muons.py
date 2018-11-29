@@ -85,7 +85,7 @@ def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: Tr
     """
     if len(files) == 0:
         print("No files specified. Using all files in data directory...")
-        files = [i for i in os.listdir(folder) if any_which_satisfy(i)]
+        files = [i for i in os.listdir(folder) if any_which_satisfy(i) and ".data" == i[-5:]]
 
     # List of dictionaries containing data from all files.
     data = parse_data(*files)

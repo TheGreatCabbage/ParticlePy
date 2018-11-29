@@ -4,6 +4,7 @@ import numpy as np
 import csv
 import datetime
 import time
+import muons
 
 
 def get_unix_time(timestamp):
@@ -50,10 +51,10 @@ muon_files = ['18-11-15-14-19 Set 2.data', '18-11-15-16-59 Set 2.data', '18-11-1
               '18-11-16-16-05 Set 2.data', '18-11-20-10-01 Set 2.data', '18-11-22-10-08 Set 2.data']
 
 # Make compatible with data folder structure. Add 'data/' path to all files.
-muon_files = list(map(lambda x: "data/{}".format(x), muon_files))
+muon_files = ["data/{}".format(i) for i in muon_files]
 weatherfile = 'data/weather_nov.csv'
 
-# So we can import this file without running the code below.
+# Add if-statement so we can import this file without running the code below.
 if __name__ == "__main__":
     weather_timestamps = get_data(weatherfile, 'timestamp')
     pressures = get_data(weatherfile, 'pressure')
@@ -66,14 +67,17 @@ if __name__ == "__main__":
     for timestamp in weather_timestamps:
         unixtimes.append(get_unix_time(timestamp))
 
-    muon_timestamps = []
-    muon_counts = []
-    for muon_file in muon_files:
-        muon_counts += get_muon_data(muon_file)[0]
-        muon_timestamps += get_muon_data(muon_file)[1]
+    muon_data = muons.sorted_data_from(muons.get_data())
+    # Average every ten minutes.
+    muon_data = muons.average_with_step(muon_data, 3600)
+    muon_timestamps = muon_data[0]
+    muon_counts = muon_data[1]
+    # for muon_file in muon_files:
+    #     muon_counts += get_muon_data(muon_file)[0]
+    #     muon_timestamps += get_muon_data(muon_file)[1]
 
-    muon_counts[:] = [int(x) for x in muon_counts]
-    muon_timestamps[:] = [int(x) for x in muon_timestamps]
+    # muon_counts[:] = [float(x) for x in muon_counts]
+    # muon_timestamps[:] = [int(x) for x in muon_timestamps]
     temperatures[:] = [float(x) for x in temperatures]
     pressures[:] = [float(x) for x in pressures]
     humidity[:] = [float(x) for x in humidity]
@@ -82,29 +86,34 @@ if __name__ == "__main__":
 
     # plt.plot(temperatures,'.')
 
-    plt.subplot(321)
+    subplots = []
+
+    subplots.append(plt.subplot(321))
     plt.plot(unixtimes, pressures, '.', label='pressures')
     plt.legend()
 
-    plt.subplot(322)
+    subplots.append(plt.subplot(322))
     plt.plot(unixtimes, temperatures, 'r.', label='temperatures')
     plt.legend()
 
-    plt.subplot(323)
+    subplots.append(plt.subplot(323))
     plt.plot(unixtimes, humidity, 'g.', label='humidity')
     plt.legend()
 
-    plt.subplot(324)
+    subplots.append(plt.subplot(324))
     plt.plot(unixtimes, solar, 'c.', label='solar irradiation')
     plt.legend()
 
-    plt.subplot(325)
+    subplots.append(plt.subplot(325))
     plt.plot(unixtimes, rainfall, 'y.', label='rainfall')
     plt.legend()
 
-    plt.subplot(326)
+    subplots.append(plt.subplot(326))
     plt.plot(muon_timestamps, muon_counts, 'k.', label='muons')
     plt.legend()
+
+    for s in subplots:
+        s.set_xlim([1.5422e9 + 1e5, 1.5426e9])
 
     plt.tight_layout()
     plt.show()
