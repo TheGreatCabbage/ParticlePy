@@ -1,15 +1,15 @@
-from camera_detector import CameraDetector
 import sys
+from pulse_detector import PulseDetector
 
-detector = CameraDetector()
+detector = PulseDetector()
 
 # Get command line arguments, remove dashes for easy parsing.
 args = list(map(lambda x: x.replace("-", ""), sys.argv[1:]))
 
-if "scint" in args:
-    # This is where we would set 'detector' to be a ScintillatorDetector.
-    raise NotImplementedError(
-        "Scintillator detector has not been implemented yet.")
+if "camera" in args:
+    # Shouldn't import down here, but requires PiCamera.
+    from camera_detector import CameraDetector
+    detector = CameraDetector()
 
 if "purge" in args:
     # Purge data, including logs and images.
