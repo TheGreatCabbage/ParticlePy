@@ -7,22 +7,25 @@ import time
 
 
 def get_unix_time(timestamp):
-    unixtime = time.mktime(datetime.datetime.strptime(timestamp, "%d/%m/%Y %H:%M").timetuple())
+    unixtime = time.mktime(datetime.datetime.strptime(
+        timestamp, "%d/%m/%Y %H:%M").timetuple())
     return unixtime
+
 
 def get_data(filename, datatype):
     data_list = []
     with open(filename) as weather_file:
         weather_data = csv.reader(weather_file, delimiter=',')
-        i=0
+        i = 0
         for row in weather_data:
             if not i < 4:
                 data_list.append(row[get_data_index(datatype)])
             i += 1
     return data_list
 
+
 def get_muon_data(filename):
-    data_list = [[],[]]
+    data_list = [[], []]
     with open(filename) as muon_file:
         muon_data = csv.reader(muon_file, delimiter=' ')
         for row in muon_data:
@@ -30,27 +33,29 @@ def get_muon_data(filename):
             data_list[1].append(row[1])
     return data_list
 
+
 def get_data_index(datatype):
     data_key = {
-            'timestamp':0,
-            'temperature':4,
-            'humidity':5,
-            'total solar irradiation':6,
-            'rainfall':21,
-            'pressure':22,
-            }
-
+        'timestamp': 0,
+        'temperature': 4,
+        'humidity': 5,
+        'total solar irradiation': 6,
+        'rainfall': 21,
+        'pressure': 22,
+    }
     return data_key[datatype]
 
-muon_files = ['18-11-15-14-19 Set 2.data', '18-11-15-16-59 Set 2.data', '18-11-16-11-30 Set 2.data', '18-11-16-16-05 Set 2.data', '18-11-20-10-01 Set 2.data', '18-11-22-10-08 Set 2.data']
+
+muon_files = ['18-11-15-14-19 Set 2.data', '18-11-15-16-59 Set 2.data', '18-11-16-11-30 Set 2.data',
+              '18-11-16-16-05 Set 2.data', '18-11-20-10-01 Set 2.data', '18-11-22-10-08 Set 2.data']
 
 weatherfile = 'Nov2018.csv'
-weather_timestamps = get_data(weatherfile,'timestamp')
+weather_timestamps = get_data(weatherfile, 'timestamp')
 pressures = get_data(weatherfile, 'pressure')
 temperatures = get_data(weatherfile, 'temperature')
 humidity = get_data(weatherfile, 'humidity')
-solar = get_data(weatherfile,'total solar irradiation')
-rainfall = get_data(weatherfile,'rainfall')
+solar = get_data(weatherfile, 'total solar irradiation')
+rainfall = get_data(weatherfile, 'rainfall')
 
 unixtimes = []
 for timestamp in weather_timestamps:
@@ -70,10 +75,10 @@ humidity[:] = [float(x) for x in humidity]
 solar[:] = [float(x) for x in solar]
 rainfall[:] = [float(x) for x in rainfall]
 
-#plt.plot(temperatures,'.')
+# plt.plot(temperatures,'.')
 
 plt.subplot(321)
-plt.plot(unixtimes, pressures, '.',label='pressures')
+plt.plot(unixtimes, pressures, '.', label='pressures')
 plt.legend()
 
 plt.subplot(322)
@@ -99,5 +104,5 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-#pg.plot(temperatures)
-#input()
+# pg.plot(temperatures)
+# input()
