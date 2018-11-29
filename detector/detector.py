@@ -13,9 +13,11 @@ class Logger:
 
     output_folder = "data"
     log_file = "log.txt"
+    data_file = "{}/{}".format(output_folder, "data.txt")
 
     def __init__(self):
         self.file = self.open_file()
+        self.data_file = self.open_data_file()
 
     def open_file(self):
         self.create_folder()
@@ -23,11 +25,19 @@ class Logger:
             open(self.file_path(), 'w').close()  # Create file.
         return open(self.file_path(), 'a')  # Open file in append mode.
 
+    def open_data_file(self):
+        if self.data_file not in os.listdir(self.output_folder):
+            open(self.data_file, 'w').close()  # Create file.
+        return open(self.data_file, 'a')
+
     def file_path(self):
         return "{0}/{1}".format(self.output_folder, self.log_file)
 
     def log(self, msg):
         self.file.write("{0} - {1}\n".format(timestamp(), msg))
+
+    def log_data(self, msg):
+        self.data_file.write(msg)
 
     def purge(self):
         shutil.rmtree(self.output_folder)

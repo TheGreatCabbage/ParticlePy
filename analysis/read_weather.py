@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import pyqtgraph as pg
 import numpy as np
 import csv
 import datetime
 import time
+import muons
 
 
 def get_unix_time(timestamp):
@@ -49,60 +51,79 @@ def get_data_index(datatype):
 muon_files = ['18-11-15-14-19 Set 2.data', '18-11-15-16-59 Set 2.data', '18-11-16-11-30 Set 2.data',
               '18-11-16-16-05 Set 2.data', '18-11-20-10-01 Set 2.data', '18-11-22-10-08 Set 2.data']
 
-weatherfile = 'Nov2018.csv'
-weather_timestamps = get_data(weatherfile, 'timestamp')
-pressures = get_data(weatherfile, 'pressure')
-temperatures = get_data(weatherfile, 'temperature')
-humidity = get_data(weatherfile, 'humidity')
-solar = get_data(weatherfile, 'total solar irradiation')
-rainfall = get_data(weatherfile, 'rainfall')
+# Make compatible with data folder structure. Add 'data/' path to all files.
+muon_files = ["data/{}".format(i) for i in muon_files]
+weatherfile = 'data/weather_nov.csv'
 
-unixtimes = []
-for timestamp in weather_timestamps:
-    unixtimes.append(get_unix_time(timestamp))
+# Add if-statement so we can import this file without running the code below.
+if __name__ == "__main__":
+    weather_timestamps = get_data(weatherfile, 'timestamp')
+    pressures = get_data(weatherfile, 'pressure')
+    temperatures = get_data(weatherfile, 'temperature')
+    humidity = get_data(weatherfile, 'humidity')
+    solar = get_data(weatherfile, 'total solar irradiation')
+    rainfall = get_data(weatherfile, 'rainfall')
 
-muon_timestamps = []
-muon_counts = []
-for muon_file in muon_files:
-    muon_counts += get_muon_data(muon_file)[0]
-    muon_timestamps += get_muon_data(muon_file)[1]
+    unixtimes = []
+    for timestamp in weather_timestamps:
+        unixtimes.append(get_unix_time(timestamp))
 
-muon_counts[:] = [int(x) for x in muon_counts]
-muon_timestamps[:] = [int(x) for x in muon_timestamps]
-temperatures[:] = [float(x) for x in temperatures]
-pressures[:] = [float(x) for x in pressures]
-humidity[:] = [float(x) for x in humidity]
-solar[:] = [float(x) for x in solar]
-rainfall[:] = [float(x) for x in rainfall]
+    muon_data = muons.sorted_data_from(muons.get_data())
+    # Average every 30 minutes.
+    muon_data = muons.average_with_step(muon_data, 600*6)
+    muon_timestamps = muon_data[0]
+    muon_counts = muon_data[1]
+    # for muon_file in muon_files:
+    #     muon_counts += get_muon_data(muon_file)[0]
+    #     muon_timestamps += get_muon_data(muon_file)[1]
 
-# plt.plot(temperatures,'.')
+    # muon_counts[:] = [float(x) for x in muon_counts]
+    # muon_timestamps[:] = [int(x) for x in muon_timestamps]
+    temperatures[:] = [float(x) for x in temperatures]
+    pressures[:] = [float(x) for x in pressures]
+    humidity[:] = [float(x) for x in humidity]
+    solar[:] = [float(x) for x in solar]
+    rainfall[:] = [float(x) for x in rainfall]
 
-plt.subplot(321)
-plt.plot(unixtimes, pressures, '.', label='pressures')
-plt.legend()
+    # plt.plot(temperatures,'.')
 
-plt.subplot(322)
-plt.plot(unixtimes, temperatures, 'r.', label='temperatures')
-plt.legend()
+    subplots = []
 
-plt.subplot(323)
-plt.plot(unixtimes, humidity, 'g.', label='humidity')
-plt.legend()
+    subplots.append(plt.subplot(321))
+    plt.plot(unixtimes, pressures, '.', label='pressures')
+    plt.legend()
 
-plt.subplot(324)
-plt.plot(unixtimes, solar, 'c.', label='solar irradiation')
-plt.legend()
+    subplots.append(plt.subplot(322))
+    plt.plot(unixtimes, temperatures, 'r.', label='temperatures')
+    plt.legend()
 
-plt.subplot(325)
-plt.plot(unixtimes, rainfall, 'y.', label='rainfall')
-plt.legend()
+    subplots.append(plt.subplot(323))
+    plt.plot(unixtimes, humidity, 'g.', label='humidity')
+    plt.legend()
 
-plt.subplot(326)
-plt.plot(muon_timestamps, muon_counts, 'k.', label='muons')
-plt.legend()
+    subplots.append(plt.subplot(324))
+    plt.plot(unixtimes, solar, 'c.', label='solar irradiation')
+    plt.legend()
 
-plt.tight_layout()
-plt.show()
+    subplots.append(plt.subplot(325))
+    plt.plot(unixtimes, rainfall, 'y.', label='rainfall')
+    plt.legend()
 
-# pg.plot(temperatures)
-# input()
+    subplots.append(plt.subplot(326))
+    plt.plot(muon_timestamps, muon_counts, 'k.', label='muons')
+    plt.legend()
+
+    muons = subplots[len(subplots)-1]
+    muons.set_ylim([2.8, max(muon_counts)])
+    # muons.xaxis.set_major_locator(matplotlib.ticker.MultipleLocator(base=24*3600) ) # Show tick every 24 hours.
+
+    time_initial = muon_timestamps[0]
+    time_final = muon_timestamps[len(muon_timestamps) - 1]
+    for s in subplots:
+        s.set_xlim([time_initial, time_final])
+
+    plt.tight_layout()
+    plt.show()
+
+    # pg.plot(temperatures)
+    # input()
