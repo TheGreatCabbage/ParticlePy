@@ -2,9 +2,9 @@
 
 ## Project structure
 
-There are two folders: `camera` is for code related to the PiCamera, and `muons` is for code related to the muon detectors in the lab. Each folder uses a `data` subfolder.
+There are two folders: `detector` is for code related to using te Raspberry Pi to detect muons, and `analysis` is for code related to analysing the data from muon detectors in the lab. Each folder uses a `data` subfolder to store data separately from the code.
 
-Most code in the `camera` folder will not run unless your device is a Raspberry Pi with PiCamera.
+Most code in the `detector` folder will not run unless your device is a Raspberry Pi with PiCamera.
 
 ## Windows and Linux
 
@@ -28,8 +28,8 @@ Git will create a folder and download the code into it. You can then open VS Cod
 
 ## Running the code
 
-To run some code, open a terminal in the same folder as the file. In VS Code, just click *Terminal->New Terminal* and then `cd` into the correct subdirectory - e.g. `cd muons`. On Windows, you could also hold shift while right-clicking when viewing the folder, then click "open Powershell window here".)
+To run some code, open a terminal in the same folder as the file. In VS Code, just click *Terminal->New Terminal* and then `cd` into the correct subdirectory - e.g. `cd analysis`. On Windows, you could also hold shift while right-clicking when viewing the folder, then click "open Powershell window here".)
 
 Then you can run `python file.py` where `file.py` is the code you wish to execute. You could instead use the *Code runner* extension in VS Code while the correct file is opened.
 
-If this causes an error, you may be in the wrong directory (in this case, use `cd` to change directories - e.g `cd muons` to change from `ParticlePy` to `ParticlePy/muons`).
+If this causes an error, you may be in the wrong directory (in this case, use `cd` to change directories - e.g `cd analysis` to change from `ParticlePy` to `ParticlePy/analysis`).
