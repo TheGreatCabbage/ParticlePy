@@ -10,6 +10,7 @@ class PulseDetector(Detector):
     last_state = False
 
     def on_start(self):
+        gpio.setmode(gpio.BOARD)
         gpio.setup(pin, gpio.IN)
 
     def update(self):

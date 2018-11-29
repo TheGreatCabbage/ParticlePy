@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import pyqtgraph as pg
 import numpy as np
 import csv
@@ -68,8 +69,8 @@ if __name__ == "__main__":
         unixtimes.append(get_unix_time(timestamp))
 
     muon_data = muons.sorted_data_from(muons.get_data())
-    # Average every ten minutes.
-    muon_data = muons.average_with_step(muon_data, 3600)
+    # Average every 30 minutes.
+    muon_data = muons.average_with_step(muon_data, 600*6)
     muon_timestamps = muon_data[0]
     muon_counts = muon_data[1]
     # for muon_file in muon_files:
@@ -112,8 +113,14 @@ if __name__ == "__main__":
     plt.plot(muon_timestamps, muon_counts, 'k.', label='muons')
     plt.legend()
 
+    muons = subplots[len(subplots)-1]
+    muons.set_ylim([2.8, max(muon_counts)])
+    # muons.xaxis.set_major_locator(matplotlib.ticker.MultipleLocator(base=24*3600) ) # Show tick every 24 hours.
+
+    time_initial = muon_timestamps[0]
+    time_final = muon_timestamps[len(muon_timestamps) - 1]
     for s in subplots:
-        s.set_xlim([1.5422e9 + 1e5, 1.5426e9])
+        s.set_xlim([time_initial, time_final])
 
     plt.tight_layout()
     plt.show()
