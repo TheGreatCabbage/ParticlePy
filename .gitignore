@@ -1,5 +1,6 @@
 # Data folder and images
 detector/data
+.DS_Store
 *.png
 
 # Byte-compiled / optimized / DLL files
