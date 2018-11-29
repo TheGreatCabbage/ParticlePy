@@ -2,6 +2,7 @@
 detector/data
 .DS_Store
 *.png
+old_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
