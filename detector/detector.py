@@ -13,7 +13,7 @@ class Logger:
 
     output_folder = "data"
     log_file = "log.txt"
-    data_file = "{}/{}".format(output_folder, "data.txt")
+    data_file = "data.txt"
 
     def __init__(self):
         self.file = self.open_file()
@@ -27,17 +27,17 @@ class Logger:
 
     def open_data_file(self):
         if self.data_file not in os.listdir(self.output_folder):
-            open(self.data_file, 'w').close()  # Create file.
-        return open(self.data_file, 'a')
+            open(self.file_path(self.data_file), 'w').close()  # Create file.
+        return open(self.file_path(self.data_file), 'a') # Open file in append mode.
 
-    def file_path(self):
-        return "{0}/{1}".format(self.output_folder, self.log_file)
+    def file_path(self, name=log_file):
+        return "{0}/{1}".format(self.output_folder, name)
 
     def log(self, msg):
         self.file.write("{0} - {1}\n".format(timestamp(), msg))
 
     def log_data(self, msg):
-        self.data_file.write(msg)
+        self.data_file.write(msg + "\n")
 
     def purge(self):
         shutil.rmtree(self.output_folder)

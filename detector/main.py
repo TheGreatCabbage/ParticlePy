@@ -31,4 +31,4 @@ if __name__ == "__main__":
         run()
     except KeyboardInterrupt:
         halt()
-        print("Program stopped.")
+        print("\nProgram stopped.")
