@@ -93,11 +93,11 @@ if __name__ == "__main__":
     plt.plot(unixtimes, pressures, '.', label='pressures')
     plt.legend()
 
-    subplots.append(plt.subplot(322))
+    subplots.append(plt.subplot(326))
     plt.plot(unixtimes, temperatures, 'r.', label='temperatures')
     plt.legend()
 
-    subplots.append(plt.subplot(323))
+    subplots.append(plt.subplot(322))
     plt.plot(unixtimes, humidity, 'g.', label='humidity')
     plt.legend()
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     plt.plot(unixtimes, rainfall, 'y.', label='rainfall')
     plt.legend()
 
-    subplots.append(plt.subplot(326))
+    subplots.append(plt.subplot(323))
     plt.plot(muon_timestamps, muon_counts, 'k.', label='muons')
     plt.legend()
 
