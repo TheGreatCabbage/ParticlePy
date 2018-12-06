@@ -8,36 +8,68 @@ pin = 2
 
 class PulseDetector(Detector):
 
+<<<<<<< HEAD
     last_state = False # The last known state of the input pin. True means that there was a detection.
     cache_data = True
     cache = []
     max_cache_size = 100
+=======
+    # The last known state of the input pin. True means that there was a detection.
+    last_state = False
+    cache_data = True
+    cache = []
+    max_cache_size = 100
+    current_size = 0
+>>>>>>> devSM
 
     def on_start(self):
         gpio.setmode(gpio.BCM)
         gpio.setup(pin, gpio.IN)
 
     def update(self):
+<<<<<<< HEAD
         state = gpio.input(pin) # The current state of the input pin. True means that there was a detection.
         # If state and last_state both true, it's probably still the same pulse. Skip to next update.
         if state and self.last_state:   
+=======
+        # The current state of the input pin. True means that there was a detection.
+        state = gpio.input(pin)
+        # If state and last_state both true, it's probably still the same pulse. Skip to next update.
+        if state and self.last_state:
+>>>>>>> devSM
             return
         else:
             if state:
                 self.on_detect()
+<<<<<<< HEAD
             self.last_state = state # Set last state to current state for next update.
+=======
+            # Set last state to current state for next update.
+            self.last_state = state
+>>>>>>> devSM
 
     def on_detect(self):
         t = time.time()
         # msg = self.get_msg(time)
         if self.cache_data:
             self.cache.append(t)
+<<<<<<< HEAD
             if len(self.cache) > self.max_cache_size:
                 self.save_cache()
                 print("Saved cache")
                 self.cache = []
         else:
             self.save_data(self.get_msg(time))
+=======
+            self.current_size += 1
+            if self.current_size > self.max_cache_size:
+                self.save_cache()
+                print("Saved cache")
+                self.cache = []
+                self.current_size = 0
+            return
+        self.save_data(self.get_msg(time))
+>>>>>>> devSM
         # print(msg)
 
     def on_stop(self):
