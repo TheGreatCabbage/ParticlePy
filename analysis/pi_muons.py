@@ -46,7 +46,7 @@ def get_counts_in_time(counts, seconds=60):
 
 if __name__ == "__main__":
     data = get_counts()
-    counts_per_min = get_counts_in_time(data)
+    counts_per_min = get_counts_in_time(data, 600)
     times = counts_per_min[0]
     counts = counts_per_min[1]
     plt.plot(times, counts, ".")
