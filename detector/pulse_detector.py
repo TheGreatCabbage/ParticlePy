@@ -11,7 +11,7 @@ class PulseDetector(Detector):
     last_state = False # The last known state of the input pin. True means that there was a detection.
     cache_data = True
     cache = []
-    max_cache_size = 10
+    max_cache_size = 100
 
     def on_start(self):
         gpio.setmode(gpio.BCM)
