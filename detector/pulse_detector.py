@@ -45,7 +45,7 @@ class PulseDetector(Detector):
         print("Detector stopping... Saved cache.")
 
     def get_msg(self, time):
-        return "{}: {}".format("Detection at", time.time())
+        return "{}: {}".format("Detection at", time)
 
     def save_data(self, data):
         self.logger.log_data(data)
