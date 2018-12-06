@@ -15,6 +15,10 @@ if "purge" in args:
     # Purge data, including logs and images.
     detector.purge_on_start = True
 
+if "nocache" in args:
+    detector.cache_data = False 
+    print("Cache disabled.")
+
 
 def run():
     detector.start()
