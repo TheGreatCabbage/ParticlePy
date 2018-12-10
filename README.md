@@ -2,9 +2,9 @@
 
 ## Project structure
 
-There are two folders: `detector` is for code related to using te Raspberry Pi to detect muons, and `analysis` is for code related to analysing the data from muon detectors in the lab. Each folder uses a `data` subfolder to store data separately from the code.
+There are two folders: `detector` is for code related to using the Raspberry Pi to detect muons, and `analysis` is for code related to analysing the data from muon detectors in the lab. Each folder uses a `data` subfolder to store data separately from the code. The data in `analysis/data` is tracked by Git.
 
-Most code in the `detector` folder will not run unless your device is a Raspberry Pi with PiCamera.
+Some code in the `detector` folder will not run unless your device is a Raspberry Pi with PiCamera.
 
 ## Windows and Linux
 

@@ -4,7 +4,7 @@ from pulse_detector import PulseDetector
 detector = PulseDetector()
 
 # Get command line arguments, remove dashes for easy parsing.
-args = list(map(lambda x: x.replace("-", ""), sys.argv[1:]))
+args = map(lambda x: x.replace("-", ""), sys.argv[1:])
 
 if "camera" in args:
     # Shouldn't import down here, but requires PiCamera.
@@ -16,7 +16,7 @@ if "purge" in args:
     detector.purge_on_start = True
 
 if "nocache" in args:
-    detector.cache_data = False 
+    detector.cache_data = False
     print("Cache disabled.")
 
 
