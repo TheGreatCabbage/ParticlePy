@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 
 folder = "data"
 time_offset = 365760  # Raspberry pi time lags behind by this amount.
+files = filter(lambda i: "pi_data" in i, os.listdir(folder))
 
 
 def get_counts():  # This only gets data from data.txt!
@@ -14,19 +15,22 @@ def get_counts():  # This only gets data from data.txt!
         list is sufficient.
     """
     lines = []
-    with open("{}/data.txt".format(folder), 'r') as f:
-        for l in f:
-            lines.append(l)
+    for f in files:
+        with open("{}/{}".format(folder, f), 'r') as current_file:
+            for l in current_file:
+                lines.append(l)
     return parse_data(lines)
 
 
 def parse_data(lines):
     """ 
-        Gets the times of each count from the file, applying the 
+        Gets the times of each count from the lines of data, applying the 
         time_offset to ensure times are in sync with "real" time
         from other detectors and data.
     """
-    return [float(i.split(": ")[-1]) + time_offset for i in lines]
+    data_set = set( # Remove duplicate items.
+        map(lambda i: float(i.split(": ")[-1]) + time_offset, lines))
+    return sorted(list(data_set))
 
 
 def get_counts_in_time(counts, seconds=60):
