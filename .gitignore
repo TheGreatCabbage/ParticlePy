@@ -1,9 +1,10 @@
-# Data folder and images
+# Data folder and images, etc.
 detector/data
 .DS_Store
 *.png
 old_data/
 *.zip
+*.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

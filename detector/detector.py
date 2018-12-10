@@ -12,29 +12,22 @@ def timestamp():
 class Logger:
 
     output_folder = "data"
-    log_file = "log.txt"
-    data_file = "data.txt"
+    log_file_name = "log.txt"
+    data_file_name = "data.txt"
 
     def __init__(self):
-        self.file = self.open_file()
-        self.data_file = self.open_data_file()
+        self.log_file, self.data_file = self.open_files()
 
-    def open_file(self):
+    def open_files(self):
         self.create_folder()
-        if self.log_file not in os.listdir(self.output_folder):
-            open(self.file_path(), 'w').close()  # Create file.
-        return open(self.file_path(), 'a')  # Open file in append mode.
+        return (self.open_file_append(self.log_file_name),
+                self.open_file_append(self.data_file_name))
 
-    def open_data_file(self):
-        if self.data_file not in os.listdir(self.output_folder):
-            open(self.file_path(self.data_file), 'w').close()  # Create file.
-        return open(self.file_path(self.data_file), 'a') # Open file in append mode.
-
-    def file_path(self, name=log_file):
-        return "{0}/{1}".format(self.output_folder, name)
+    def file_path(self, name):
+        return "{}/{}".format(self.output_folder, name)
 
     def log(self, msg):
-        self.file.write("{0} - {1}\n".format(timestamp(), msg))
+        self.log_file.write("{} - {}\n".format(timestamp(), msg))
 
     def log_data(self, msg):
         self.data_file.write(msg + "\n")
@@ -44,10 +37,19 @@ class Logger:
         self.create_folder()
 
     def create_folder(self):
+        # Create folder if not exists.
         if self.output_folder not in os.listdir("."):
-            os.mkdir(self.output_folder)  # Create folder.
+            os.mkdir(self.output_folder)  
 
-    def shutdown(self): self.file.close()
+    def open_file_append(self, name):
+        # Create file if not exists.
+        if name not in os.listdir(self.output_folder):
+            open(self.file_path(name), 'w').close()
+        return open(self.file_path(name), 'a')  # Open file in append mode.
+
+    def shutdown(self):
+        self.log_file.close()
+        self.data_file.close()
 
 
 class Detector(ABC):
