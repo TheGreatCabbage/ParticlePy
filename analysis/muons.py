@@ -93,10 +93,10 @@ def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: Tr
     # Deal with duplicate data.
     if conflict_strategy == "average":
         print("Averaging data...")
-        return average(data)
+        return sorted_data_from(average(data))
     elif conflict_strategy == "overwrite":
         print("Overwriting duplicate data. This is dangerous! Take care...")
-        return make_unique(data)
+        return sorted_data_from(make_unique(data))
     else:
         print("Unknown conflict strategy: '{}'\nExiting.".format(conflict_strategy))
         sys.exit(-1)
@@ -119,7 +119,6 @@ def sorted_data_from(dict):
     for i in sorted_tuples:
         for j in range(0, 2):
             result[j].append(i[j])
-
     return result
 
 
