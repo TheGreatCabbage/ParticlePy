@@ -1,4 +1,5 @@
 import string
+import os
 from datetime import datetime
 
 """
@@ -19,42 +20,71 @@ AB - Air Pressure (mbar)
 
 """
 
-letters = string.ascii_uppercase
-indices = list(map(lambda x: letters.index(x), list(letters)))
-dict_letters = dict(zip(letters, indices))
+data_type = {
+    'timestamp': 0,
+    'temperature': 4,
+    'humidity': 5,
+    'total_solar_irradiation': 6,
+    'rainfall': 21,
+    'pressure': 22,
+}
+folder = "data"
 
 
-def get_weather():
+def get_data():
+    """
+        Returns a list, sorted by time, whose items are each 
+        a list containing the value of each column in a row
+        from the CSV file. 
+    """
     data = []
-    with open("data/{}".format("weather_nov.csv")) as f:
-        index = 0
-        for line in f:
-            if index < 4:
-                index += 1
-                continue
-            data.append(line.split(","))
+    for file in os.listdir(folder):
+        if "weather_" not in file:
+            continue
+        with open("{}/{}".format(folder, file), 'r') as f:
+            index = 0
+            for line in f:
+                # Skip first few lines - they don't contain weather data.
+                if index < 4:
+                    index += 1
+                    continue
+                line_data = line.split(",")
+                line_data[0] = unix_time(line_data[0])
+                data.append(line_data)
 
-    return data
+    return sorted(data, key=lambda i: i[0])  # Sort data by time.
 
 
 def get_column(data, designation):
-    index = dict_letters[designation]
+    """
+        Returns a list containing the appropriate data type,
+        retaining the order in the 'data' parameter.
+    """
+    index = data_type[designation]
     return list(map(lambda x: x[index], data))
 
 
-def get_temperatures(data):
-    return map_float(get_column(data, "E"))
+def get_times(data): return get_column(data, "timestamp")
 
 
-def map_float(data):
-    return list(map(lambda x: float(x), data))
+def get_temperatures(data): return map_float(get_column(data, "temperature"))
 
 
-def get_times(data):
-    return list(map(lambda x: datetime.strptime(x, "%a"), get_column(data, "A")))
+def get_pressures(data): return map_float(get_column(data, "pressure"))
 
 
-if __name__ == "__main__":
-    data = get_weather()
-    for datum in get_column(data, "E"):
-        print(datum)
+def get_rainfall(data): return map_float(get_column(data, "rainfall"))
+
+
+def get_humidity(data): return map_float(get_column(data, "humidity"))
+
+
+def get_solar_irradiation(data):
+    return map_float(get_column(data, "total_solar_irradiation"))
+
+
+def map_float(data): return list(map(lambda x: float(x), data))
+
+
+def unix_time(time_str):
+    return datetime.strptime(time_str, "%d/%m/%Y %H:%M").timestamp()

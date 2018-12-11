@@ -33,7 +33,6 @@ class PulseDetector(Detector):
 
     def on_detect(self):
         t = time.time()
-        # msg = self.get_msg(time)
         if self.cache_data:
             self.cache.append(t)
             self.current_size += 1
@@ -44,7 +43,6 @@ class PulseDetector(Detector):
                 self.current_size = 0
             return
         self.save_data(self.get_msg(time))
-        # print(msg)
 
     def on_stop(self):
         self.save_cache()
