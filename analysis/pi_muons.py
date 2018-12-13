@@ -4,11 +4,13 @@ import muons
 from matplotlib import pyplot as plt
 
 folder = "data"
-time_offset = 365760  # Raspberry pi time lags behind by this amount.
+# Raspberry pi time lags behind by this amount. Need to adjust it to align with weather data and other muon data.
+time_offset = 365760
+# Only get data from files with "pi_data" in their names.
 files = filter(lambda i: "pi_data" in i, os.listdir(folder))
 
 
-def get_counts():  # This only gets data from data.txt!
+def get_counts():
     """
         Returns a list containing the time of every recorded count. 
         There is only one count corresponding to each time, so a 1D
@@ -28,14 +30,19 @@ def parse_data(lines):
         time_offset to ensure times are in sync with "real" time
         from other detectors and data.
     """
-    data_set = set( # Remove duplicate items.
-        map(lambda i: float(i.split(": ")[-1]) + time_offset, lines))
-    return sorted(list(data_set))
+    data_set = set(  # Remove duplicate items by using a set.
+        map(lambda i: float(i.split(": ")[-1]) + time_offset, lines))  # Extract the time from each line, and adjust for the offset.
+    return sorted(list(data_set))  # Convert back to a list, and sort.
 
 
 def get_counts_in_time(counts, seconds=60):
+    """
+        Split up a list of times (each representing a single count)
+        to get a list containing the number of counts in each interval of
+        the parameter 'seconds'.
+    """
     start = counts[0]  # The start value of each interval.
-    # Tuple containing list of times and associated times.
+    # Tuple containing list of times and associated counts.
     counts_in_time = ([], [])
     temp_counts = 0  # Number of counts in the current interval.
     for c in counts:
@@ -50,8 +57,8 @@ def get_counts_in_time(counts, seconds=60):
 
 if __name__ == "__main__":
     data = get_counts()
-    counts_per_min = get_counts_in_time(data, 600)
-    times = counts_per_min[0]
-    counts = counts_per_min[1]
+    counts_per_time = get_counts_in_time(data, 600)
+    times = counts_per_time[0]
+    counts = counts_per_time[1]
     plt.plot(times, counts, ".")
     plt.show()

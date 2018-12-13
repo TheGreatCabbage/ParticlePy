@@ -35,11 +35,11 @@ def get_data():
     """
         Returns a list, sorted by time, whose items are each 
         a list containing the value of each column in a row
-        from the CSV file. 
+        from the weather CSV file. 
     """
     data = []
     for file in os.listdir(folder):
-        if "weather_" not in file:
+        if "weather_" not in file:  # Use only files with "weather_" in their name.
             continue
         with open("{}/{}".format(folder, file), 'r') as f:
             index = 0
@@ -49,6 +49,7 @@ def get_data():
                     index += 1
                     continue
                 line_data = line.split(",")
+                # Convert timestamp to Unix time.
                 line_data[0] = unix_time(line_data[0])
                 data.append(line_data)
 
@@ -58,7 +59,7 @@ def get_data():
 def get_column(data, designation):
     """
         Returns a list containing the appropriate data type,
-        retaining the order in the 'data' parameter.
+        retaining the same order as in the 'data' parameter.
     """
     index = data_type[designation]
     return list(map(lambda x: x[index], data))
@@ -83,8 +84,15 @@ def get_solar_irradiation(data):
     return map_float(get_column(data, "total_solar_irradiation"))
 
 
-def map_float(data): return list(map(lambda x: float(x), data))
+def map_float(data):
+    """
+        Converts a list's items to floats, returning the modified list.
+    """
+    return list(map(lambda x: float(x), data))
 
 
 def unix_time(time_str):
+    """
+        Converts a timestamp from the weather data to Unix time.
+    """
     return datetime.strptime(time_str, "%d/%m/%Y %H:%M").timestamp()

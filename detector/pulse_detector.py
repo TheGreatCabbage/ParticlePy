@@ -10,10 +10,11 @@ class PulseDetector(Detector):
 
     # The last known state of the input pin. True means that there was a detection.
     last_state = False
+    # Whether we should store detections in a cache which gets written to a file periodically, or write to file on every detection.
     cache_data = True
     cache = []
     max_cache_size = 100
-    current_size = 0
+    current_cache_size = 0
 
     def on_start(self):
         gpio.setmode(gpio.BCM)
@@ -35,12 +36,12 @@ class PulseDetector(Detector):
         t = time.time()
         if self.cache_data:
             self.cache.append(t)
-            self.current_size += 1
-            if self.current_size > self.max_cache_size:
+            self.current_cache_size += 1
+            if self.current_cache_size > self.max_cache_size:
                 self.save_cache()
                 print("Saved cache")
                 self.cache = []
-                self.current_size = 0
+                self.current_cache_size = 0
             return
         self.save_data(self.get_msg(time))
 
