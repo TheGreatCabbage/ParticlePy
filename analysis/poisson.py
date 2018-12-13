@@ -16,11 +16,7 @@ for i in range(0, num_counts):
     diffs.append(counts[i+1] - counts[i])
 
 
-def poisson(x, l): return math.log(l * math.exp(-l*x), math.e)
-
-
 def ln(x): return math.log(x, math.e)
-# popt, pcov = curve_fit(poisson, diffs, )
 
 
 factor = 0.1
@@ -34,7 +30,7 @@ logs = [ln(i) for i in hist]
 slope, intercept, r, p, err = stats.linregress(midpoints, logs)
 
 plt.plot(midpoints, logs, ".")
-plt.plot(midpoints, midpoints * slope + intercept)
+plt.plot(midpoints, midpoints * slope + intercept)  # Line of best fit.
 plt.xlabel("Time difference between counts (s)")
 plt.ylabel("Natural logarithm of number of events in {}s interval".format(factor))
 plt.show()

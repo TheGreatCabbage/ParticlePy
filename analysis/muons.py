@@ -123,7 +123,6 @@ def sorted_data_from(dict):
 
 
 def average_with_step(sorted_data, step_in_seconds):
-    # TODO: check if this works correctly.
     result = ([], [])
     start_value = sorted_data[0][0]  # First time value
     temp = []  # List containing the counts to be averaged.
