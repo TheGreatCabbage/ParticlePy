@@ -20,7 +20,7 @@ AB - Air Pressure (mbar)
 
 """
 
-data_index = {
+data_type = {
     'timestamp': 0,
     'temperature': 4,
     'humidity': 5,
@@ -56,12 +56,12 @@ def get_data():
     return sorted(data, key=lambda i: i[0])  # Sort data by time.
 
 
-def get_column(data, data_type):
+def get_column(data, designation):
     """
         Returns a list containing the appropriate data type,
         retaining the same order as in the 'data' parameter.
     """
-    index = data_index[data_type]
+    index = data_type[designation]
     return list(map(lambda x: x[index], data))
 
 
