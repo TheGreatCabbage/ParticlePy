@@ -30,13 +30,17 @@ weather_plot_data = (
 )
 
 muons_plot = plt.subplot(331)
-plt.plot(muon_timestamps, muon_counts, 'k.', label='Muons')
+plt.plot(muon_timestamps, muon_counts, 'k.', label='Cylindrical Count')
+plt.xlabel('Seconds since 00:00:00 01/01/1970')
+plt.ylabel('Cyclindrical Muon Count')
 plt.legend()
 muons_plot.set_ylim([2.8, max(muon_counts) + 0.05])
 
 pi_muons_plot = plt.subplot(337)
 subplots.append(pi_muons_plot)
 plt.plot(pi_times, pi_counts, 'b.', label="RPi muons")
+plt.xlabel('Seconds since 00:00:00 01/01/1970')
+plt.ylabel('Raspberry Pi Muon Count')
 plt.legend()
 
 for i in range(len(weather_plot_data)):
@@ -46,6 +50,8 @@ for i in range(len(weather_plot_data)):
     subplots.append(plt.subplot(id))
 
     plt.plot(weather_times, plot_data[2], plot_data[1], label=plot_data[0])
+    plt.xlabel('Seconds since 00:00:00 01/01/1970')
+    plt.ylabel(plot_data[0])
     plt.legend()
 
 for s in subplots:
