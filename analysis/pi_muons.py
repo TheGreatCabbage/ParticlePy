@@ -48,7 +48,7 @@ def get_counts_in_time(counts, seconds=60):
     for c in counts:
         if c - start > seconds:  # If we exceed interval, start a new one.
             counts_in_time[0].append(start)
-            counts_in_time[1].append(temp_counts)
+            counts_in_time[1].append(temp_counts / (c-start))
             temp_counts = 0
             start = c
         temp_counts += 1
