@@ -78,6 +78,14 @@ def make_unique(data):
     return result
 
 
+def get_data_set_2():
+    return get_data(any_which_satisfy=lambda x: "Set 2" in x, conflict_strategy="overwrite")
+
+
+def get_data_set_3():
+    return get_data(any_which_satisfy=lambda x: "Set 3" in x, conflict_strategy="overwrite")
+
+
 def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: True):
     """
     Parses data files, averaging any duplicate entries by default. Returns a dictionary
@@ -145,6 +153,22 @@ def average_with_step(sorted_data, step_in_seconds):
         temp.append(sorted_data[1][i])
 
     return result
+
+
+def indices_between_times(times, start, end):
+    """
+        When provided with a list of times, a start time and an end time,
+        returns a tuple containing the first index where the time is greater than
+        'start' and the last index where the time is less than 'end'.
+    """
+    indices = [-1, -1]
+    for i in range(0, len(times)):
+        t = times[i]
+        if t >= start and indices[0] is -1:
+            indices[0] = i
+        if t >= end and indices[1] is -1:
+            indices[1] = i - 1
+    return tuple(indices)
 
 
 # The if statement ensures that its code does not run when this file is imported.
