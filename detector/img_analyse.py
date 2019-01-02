@@ -8,6 +8,7 @@ import os
 
 folder = "data"
 
+
 def get_pixels(img):
     pixels = imread(img, as_gray=False, pilmode='L')
     return pixels
