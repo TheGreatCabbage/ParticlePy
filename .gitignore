@@ -5,6 +5,8 @@ detector/data
 old_data/
 *.zip
 *.xlsx
+.vscode/settings.json
+analysis/data/generated*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
