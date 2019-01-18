@@ -74,6 +74,7 @@ def write_lab_set_2_hourly(weather_dict):
         mu.get_data_set_2(no_print=True), 3600)
     write_lab_hourly(weather_dict, times, counts, file_lab_set2_3600)
 
+
 def write_lab_set_3_hourly(weather_dict):
     times, counts = mu.average_with_step(
         mu.get_data_set_3(no_print=True), 3600)
@@ -94,6 +95,14 @@ def write_pi_data(weather_dict):
     data.write_to_file(file_pi)
 
 
+def write_pi_data_hourly(weather_dict):
+    times, counts = pi.get_counts_in_time(pi.get_counts(), seconds=3600)
+    data = Data().from_counts_times(counts, times)
+
+    associate_weather(data, weather_dict)
+    data.write_to_file(file_pi_3600)
+
+
 if __name__ == "__main__":
     print("Loading weather data...")
     weather = w.get_data()
@@ -110,7 +119,8 @@ if __name__ == "__main__":
         Process(target=write_lab_set_3, args=(weather_dict,)): "write lab data (set 3) averaged over 10 minutes",
         Process(target=write_lab_set_2_hourly, args=(weather_dict,)): "write lab data (set 2) averaged over 1 hour",
         Process(target=write_lab_set_3_hourly, args=(weather_dict,)): "write lab data (set 3) averaged over 1 hour",
-        Process(target=write_pi_data, args=(weather_dict,)): "write Raspberry Pi data averaged over 10 minutes"
+        Process(target=write_pi_data, args=(weather_dict,)): "write Raspberry Pi data averaged over 10 minutes",
+        Process(target=write_pi_data_hourly, args=(weather_dict,)): "write Raspberry Pi data averaged over 1 hour"
     }
 
     for p in processes:
