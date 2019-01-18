@@ -12,6 +12,7 @@ type_count = "count"
 
 file_lab = "generated_lab_data"
 file_pi = "generated_pi_data"
+file_pi_3600 = "generated_pi_data_3600"
 file_lab_avg_600 = "generated_lab_data_avg_600"
 file_lab_set2_600 = "generated_lab_data_set2_600"
 file_lab_set3_600 = "generated_lab_data_set3_600"
