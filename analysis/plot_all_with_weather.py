@@ -1,17 +1,24 @@
 import data
 from matplotlib import pyplot as plt
+import weather as w
 
 """
 Plot muons from all detectors separately, with weather.
 """
 
 lab_set2 = data.get_lab_data_set2_3600()
+lab_set2_times = lab_set2.get(data.type_time)
+
 lab_set3 = data.get_lab_data_set3_3600()
+lab_set3_times = lab_set3.get(data.type_time)
+
 pi = data.get_data(data.file_pi_3600)
+weather = w.get_data()
+weather_times = w.get_times(weather)
 
 # Use these for x-limits, so all plots aligned.
-min_time = min(lab_set2.get(data.type_time)[0], pi.get(data.type_time)[0])
-max_time = max(lab_set2.get(data.type_time)[-1], pi.get(data.type_time)[-1])
+min_time = min(lab_set2_times[0], pi.get(data.type_time)[0])
+max_time = max(lab_set2_times[-1], pi.get(data.type_time)[-1])
 
 
 class Subplot:
@@ -19,7 +26,7 @@ class Subplot:
     A data object to make many subplots simpler.
     """
 
-    def __init__(self, xvalues, yvalues, xlabel, ylabel, subplot_index, plot_appearance=".", ylim=None, label=None):
+    def __init__(self, xvalues, yvalues, xlabel, ylabel, subplot_index, plot_appearance=".", ylim=None, label=None, yerr=None):
         self.xvalues = xvalues
         self.yvalues = yvalues
         self.xlabel = xlabel
@@ -28,6 +35,7 @@ class Subplot:
         self.plot_appearance = plot_appearance
         self.ylim = ylim
         self.label = label
+        self.yerr = yerr
 
     def set_ylimits(self):
         if self.ylim and len(self.ylim) == 2:
@@ -39,48 +47,75 @@ class Subplot:
             plt.legend([self.label])
 
 
+# The ratio of points plotted to error bars plotted.
+error_bars_ratio = 10
+
 subplots = (
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(
-        data.type_count), "Unix time (s)", "Count rate (1/s)", 331, ylim=(2.6, 4.1), label="Lab muon detector (set 2)"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(
-        data.type_count), "Unix time (s)", "Count rate (1/s)", 334, ylim=(2.6, 4.1), label="Lab muon detector (set 3)"),
-    Subplot(pi.get(data.type_time), pi.get(
-        data.type_count), "Unix time (s)", "Count rate (1/s)", 337, ylim=(0.16, 0.42), label="Raspberry Pi muon detector"),
+    # Counts for lab_set2 data.
+    Subplot(lab_set2_times, lab_set2.get(data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            331, ylim=(1, 6), label="Lab muon detector (set 2)"),
 
-    # Plot weather from set 2 and set 3 on same subplot to fill in gaps where one detector is not running.
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(data.type_pressure),
+    # Error bars for lab_set2 data.
+    Subplot(lab_set2.get_subset(error_bars_ratio, data.type_time),
+            lab_set2.get_subset(error_bars_ratio,
+                                data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            331,
+            "none",
+            yerr=lab_set2.get_subset(error_bars_ratio, data.type_error)),
+
+    Subplot(lab_set3_times, lab_set3.get(data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            334, ylim=(1, 6), label="Lab muon detector (set 3)"),
+
+    Subplot(lab_set3.get_subset(error_bars_ratio, data.type_time),
+            lab_set3.get_subset(error_bars_ratio,
+                                data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            334,
+            "none",
+            yerr=lab_set3.get_subset(error_bars_ratio, data.type_error)),
+
+
+    Subplot(pi.get(data.type_time), pi.get(data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            337, ylim=(0, 1.2), label="Raspberry Pi muon detector"),
+
+    Subplot(pi.get_subset(error_bars_ratio, data.type_time),
+            pi.get_subset(error_bars_ratio,
+                          data.type_count),
+            "Unix time (s)", "Count rate ($s^{-1}$)",
+            337,
+            "none",
+            yerr=pi.get_subset(error_bars_ratio, data.type_error)),
+
+    # Plot weather data.
+    Subplot(weather_times, w.get_pressures(weather),
             "Unix time (s)", "Pressure (mbar)", 332, "b.", label="Pressure"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(data.type_pressure),
-            "Unix time (s)", "Pressure (mbar)", 332, "b."),
 
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(data.type_temperature),
+    Subplot(weather_times, w.get_temperatures(weather),
             "Unix time (s)", "Temperature (°C)", 333, "r.", label="Temperature"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(data.type_temperature),
-            "Unix time (s)", "Temperature (°C)", 333, "r."),
 
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(data.type_humidity),
+    Subplot(weather_times, w.get_humidity(weather),
             "Unix time (s)", "Relative humidity (percent)", 335, "g.", label="Humidity"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(data.type_humidity),
-            "Unix time (s)", "Relative humidity (percent)", 335, "g."),
 
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(data.type_rainfall),
+    Subplot(weather_times, w.get_rainfall(weather),
             "Unix time (s)", "Rainfall (mm per 10 minutes)", 336, "y.", label="Rainfall"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(data.type_rainfall),
-            "Unix time (s)", "Rainfall (mm per 10 minutes)", 336, "y."),
 
-    Subplot(lab_set2.get(data.type_time), lab_set2.get(data.type_solar_irradiation),
-            "Unix time (s)", "Solar irradiation (kW/m2 avg 10 min)", 338, "c.", label="Solar irradiation"),
-    Subplot(lab_set3.get(data.type_time), lab_set3.get(data.type_solar_irradiation),
-            "Unix time (s)", "Solar irradiation (kW/m2 avg 10 min)", 338, "c.")
+    Subplot(weather_times, w.get_solar_irradiation(weather),
+            "Unix time (s)", "Solar irradiation ($kWm^{-2}$ avg 10 min)", 338, "c.", label="Solar irradiation"),
 )
 
 for s in subplots:
     plt.subplot(s.subplot_index)
-    plt.plot(s.xvalues, s.yvalues,  s.plot_appearance)
+    plt.errorbar(s.xvalues, s.yvalues, s.yerr, fmt=s.plot_appearance)
     plt.xlabel(s.xlabel)
     plt.ylabel(s.ylabel)
     plt.xlim(min_time, max_time)
     s.set_ylimits()
     s.legend()
 
-plt.show()
+figure = plt.gcf()
+figure.set_size_inches(16, 12)
+plt.savefig("all_muons_weather", dpi=200)
