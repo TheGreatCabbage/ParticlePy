@@ -6,12 +6,8 @@ import pi_muons as pi
 
 def divide(data1, data2):
     """
-    Divides the counts of data1 by the counts of data2
-    and returns a new Data object containing the result.
-
-    If there is no denominator value closer in time than 
-    `max_difference` to the numerator, the division for 
-    that numerator will not be calculated.
+    Divides the counts of data1 by the counts of data2 and 
+    returns tuple containing two numpy arrays (times, counts).
     """
     times, counts = [], []
 
