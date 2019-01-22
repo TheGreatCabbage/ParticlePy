@@ -196,7 +196,7 @@ def get_lab_data_set3_3600():
 
 
 def get_pi_data():
-    """Gets the Raspberry Pi data."""
+    """Gets the Raspberry Pi data, averaged over 10 minute intervals."""
     return get_data(file_pi)
 
 

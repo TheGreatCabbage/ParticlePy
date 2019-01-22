@@ -47,11 +47,6 @@ def write_lab_data():
     associate_weather(data, w.get_data())
     data.write_to_file(file_lab)
 
-
-def write_lab_data_avg(time=10*60):
-    pass
-
-
 def write_lab_set_2(weather_dict):
     times, counts = mu.average_with_step(mu.get_data_set_2(no_print=True), 600)
     write_lab_10min(weather_dict, times, counts, file_lab_set2_600)

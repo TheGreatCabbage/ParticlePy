@@ -78,11 +78,11 @@ def make_unique(data):
     return result
 
 
-def get_data_set_2(no_print=False):
+def get_data_set_2(no_print=True):
     return get_data(any_which_satisfy=lambda x: "Set 2" in x, conflict_strategy="overwrite", no_print=no_print)
 
 
-def get_data_set_3(no_print=False):
+def get_data_set_3(no_print=True):
     return get_data(any_which_satisfy=lambda x: "Set 3" in x, conflict_strategy="overwrite", no_print=no_print)
 
 
