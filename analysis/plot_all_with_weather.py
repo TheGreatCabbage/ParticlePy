@@ -1,4 +1,5 @@
 import data
+import math
 from matplotlib import pyplot as plt
 import weather as w
 
@@ -11,7 +12,7 @@ factor = 600
 
 def mapper(datum):
     datum.set(data.type_count, datum.get(data.type_count)*factor)
-    datum.set(data.type_error, datum.get(data.type_error)*factor)
+    datum.set(data.type_error, math.sqrt(datum.get(data.type_count)))
     return datum
 
 
@@ -35,7 +36,7 @@ class Subplot:
     A data object to make many subplots simpler.
     """
 
-    def __init__(self, xvalues, yvalues, xlabel, ylabel, subplot_index, plot_appearance=".", ylim=None, label=None, yerr=None):
+    def __init__(self, xvalues, yvalues, xlabel, ylabel, subplot_index, plot_appearance=".", ylim=None, label=None, yerr=None, marker_size=4):
         self.xvalues = xvalues
         self.yvalues = yvalues
         self.xlabel = xlabel
@@ -45,6 +46,7 @@ class Subplot:
         self.ylim = ylim
         self.label = label
         self.yerr = yerr
+        self.marker_size = marker_size
 
     def set_ylimits(self):
         if self.ylim and len(self.ylim) == 2:
@@ -57,15 +59,17 @@ class Subplot:
 
 
 # The ratio of points plotted to error bars plotted.
-error_bars_ratio = 10 * 6
+error_bars_ratio = 1
 unix_time_label = "Seconds since 01/01/1970, 00:00:00 UTC"
 counts_label = "Counts per 10 minutes"
+#counts_label = "Counts (10 min$^{-1}$)"
 
 subplots = (
     # Counts for lab_set2 data.
     Subplot(lab_set2_times, lab_set2.get(data.type_count),
             unix_time_label, counts_label,
-            421, ylim=(1, 6), label="Lab muon detector (set 2)"),
+            421, ylim=(1, 6), label="Lab muon detector (set 2)",
+            marker_size=1),
 
     # Error bars for lab_set2 data.
     Subplot(lab_set2.get_subset(error_bars_ratio, data.type_time),
@@ -74,11 +78,13 @@ subplots = (
             unix_time_label, counts_label,
             421,
             "none",
-            yerr=lab_set2.get_subset(error_bars_ratio, data.type_error)),
+            yerr=lab_set2.get_subset(error_bars_ratio, data.type_error),
+            marker_size=1),
 
     Subplot(lab_set3_times, lab_set3.get(data.type_count),
             unix_time_label, counts_label,
-            423, ylim=(1, 6), label="Lab muon detector (set 3)"),
+            423, ylim=(1, 6), label="Lab muon detector (set 3)",
+            marker_size=1),
 
     Subplot(lab_set3.get_subset(error_bars_ratio, data.type_time),
             lab_set3.get_subset(error_bars_ratio,
@@ -86,12 +92,14 @@ subplots = (
             unix_time_label, counts_label,
             423,
             "none",
-            yerr=lab_set3.get_subset(error_bars_ratio, data.type_error)),
+            yerr=lab_set3.get_subset(error_bars_ratio, data.type_error),
+            marker_size=1),
 
 
     Subplot(pi.get(data.type_time), pi.get(data.type_count),
             unix_time_label, counts_label,
-            425, ylim=(0, 1.2), label="Raspberry Pi muon detector"),
+            425, ylim=(0, 1.2), label="Raspberry Pi muon detector",
+            marker_size=1),
 
     Subplot(pi.get_subset(error_bars_ratio, data.type_time),
             pi.get_subset(error_bars_ratio,
@@ -99,7 +107,8 @@ subplots = (
             unix_time_label, counts_label,
             425,
             "none",
-            yerr=pi.get_subset(error_bars_ratio, data.type_error)),
+            yerr=pi.get_subset(error_bars_ratio, data.type_error),
+            marker_size=1),
 
     # Plot weather data.
     Subplot(weather_times, w.get_pressures(weather),
@@ -120,7 +129,8 @@ subplots = (
 
 for s in subplots:
     plt.subplot(s.subplot_index)
-    plt.errorbar(s.xvalues, s.yvalues, s.yerr, fmt=s.plot_appearance)
+    plt.errorbar(s.xvalues, s.yvalues, s.yerr,
+                 fmt=s.plot_appearance, markersize=s.marker_size)
     plt.xlabel(s.xlabel)
     plt.ylabel(s.ylabel)
     plt.xlim(min_time, max_time)
