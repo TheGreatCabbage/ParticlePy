@@ -21,10 +21,21 @@ weather_types = {
 for d in data_tuple:
     data_obj = d[0]
 
+    count = 0
+
     for key, value in weather_types.items():
         y = data_obj.get(data.type_count)
         x = data_obj.get(value)
 
         slope, intercept, r, p, err = stats.linregress(x, y)
-        print("{}, {}: correlation = {}".format(d[1], key, r))
-    print("")
+        if count == 1:  # Plotting temperatures.
+            plt.plot(x, y, ".")
+            plt.plot(x, np.array(x)*slope + intercept)
+        print("{}, {}: correlation = {}".format(
+            d[1], key, r))
+
+        count += 1
+
+    print("\n")
+
+plt.show()
