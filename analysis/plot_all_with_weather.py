@@ -112,13 +112,13 @@ subplots = (
 
     # Plot weather data.
     Subplot(weather_times, w.get_pressures(weather),
-            unix_time_label, "Pressure (mbar)", 427, "b.", label="Pressure"),
+            unix_time_label, "Pressure (mbar)", 424, "b.", label="Pressure"),
 
     Subplot(weather_times, w.get_temperatures(weather),
             unix_time_label, "Temperature (°C)", 422, "r.", label="Temperature"),
 
     Subplot(weather_times, w.get_humidity(weather),
-            unix_time_label, "Relative humidity (percent)", 424, "g.", label="Humidity"),
+            unix_time_label, "Relative humidity (percent)", 427, "g.", label="Humidity"),
 
     Subplot(weather_times, w.get_rainfall(weather),
             unix_time_label, "Rainfall (mm per 10 minutes)", 426, "y.", label="Rainfall"),
