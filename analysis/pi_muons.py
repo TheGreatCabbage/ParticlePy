@@ -4,10 +4,11 @@ import muons
 from matplotlib import pyplot as plt
 
 folder = "data"
+name = "pi_data"
 # Raspberry pi time lags behind by this amount. Need to adjust it to align with weather data and other muon data.
 time_offset = 365760
 # Only get data from files with "pi_data" in their names.
-files = filter(lambda i: "pi_data" in i, os.listdir(folder))
+files = filter(lambda i: name in i[:len(name)], os.listdir(folder))
 
 
 def get_counts():
@@ -48,7 +49,7 @@ def get_counts_in_time(counts, seconds=60):
     for c in counts:
         if c - start > seconds:  # If we exceed interval, start a new one.
             counts_in_time[0].append(start)
-            counts_in_time[1].append(temp_counts)
+            counts_in_time[1].append(temp_counts / (c-start))
             temp_counts = 0
             start = c
         temp_counts += 1

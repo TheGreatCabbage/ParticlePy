@@ -78,13 +78,22 @@ def make_unique(data):
     return result
 
 
-def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: True):
+def get_data_set_2(no_print=True):
+    return get_data(any_which_satisfy=lambda x: "Set 2" in x, conflict_strategy="overwrite", no_print=no_print)
+
+
+def get_data_set_3(no_print=True):
+    return get_data(any_which_satisfy=lambda x: "Set 3" in x, conflict_strategy="overwrite", no_print=no_print)
+
+
+def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: True, no_print=False):
     """
-    Parses data files, averaging any duplicate entries by default. Returns a dictionary
-    containing the time (key) and muon count (value).
+    Parses data files, averaging any duplicate entries by default. Returns a tuple containing
+    a list of times and a list of counts respectively.
     """
     if len(files) == 0:
-        print("No files specified. Using all files in data directory...")
+        show_output(
+            "No files specified. Using all files in data directory...", not no_print)
         files = [i for i in os.listdir(
             folder) if any_which_satisfy(i) and ".data" == i[-5:]]
 
@@ -92,14 +101,20 @@ def get_data(*files, conflict_strategy="average", any_which_satisfy=lambda x: Tr
     data = parse_data(*files)
     # Deal with duplicate data.
     if conflict_strategy == "average":
-        print("Averaging data...")
+        show_output("Averaging data...", not no_print)
         return sorted_data_from(average(data))
     elif conflict_strategy == "overwrite":
-        print("Overwriting duplicate data. This is dangerous! Take care...")
+        show_output(
+            "Overwriting duplicate data. This is dangerous! Take care...", not no_print)
         return sorted_data_from(make_unique(data))
     else:
         print("Unknown conflict strategy: '{}'\nExiting.".format(conflict_strategy))
         sys.exit(-1)
+
+
+def show_output(text, show):
+    if show:
+        print(text)
 
 
 def get_counts_from(data_dict):
@@ -147,8 +162,17 @@ def average_with_step(sorted_data, step_in_seconds):
     return result
 
 
-# The if statement ensures that its code does not run when this file is imported.
-if __name__ == "__main__":
-    data = get_data()
-    for v in (data.keys()):
-        print("{} counts at {}".format(data[v], v))
+def indices_between_times(times, start, end):
+    """
+        When provided with a list of times, a start time and an end time,
+        returns a tuple containing the first index where the time is greater than
+        'start' and the last index where the time is less than 'end'.
+    """
+    indices = [-1, -1]
+    for i in range(0, len(times)):
+        t = times[i]
+        if t >= start and indices[0] is -1:
+            indices[0] = i
+        if t >= end and indices[1] is -1:
+            indices[1] = i - 1
+    return tuple(indices)
